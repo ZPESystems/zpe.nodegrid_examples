@@ -1,0 +1,104 @@
+# -------------
+# templates/network_settings.yaml
+ - example: hostname = nodegrid
+   getval: 'hostname = (?P<hostname>\S+)'
+   result:
+      hostname: "{{ hostname }}"
+      domain_name: "{{ domain_name }}"
+   shared: True
+
+ - example: domain_name = localdomain
+   getval: 'domain_name = (?P<domain_name>\S+)'
+   result:
+      domain_name: "{{ domain_name }}"
+   shared: True
+
+ - example: enable_ipv4_ip_forward = no
+   getval: 'enable_ipv4_ip_forward = (?P<enable_ipv4_ip_forward>\S+)'
+   result:
+      enable_ipv4_ip_forward: "{{ enable_ipv4_ip_forward }}"
+   shared: True
+
+ - example: enable_ipv6_ip_forward = no
+   getval: 'enable_ipv6_ip_forward = (?P<enable_ipv6_ip_forward>\S+)'
+   result:
+      enable_ipv6_ip_forward: "{{ enable_ipv6_ip_forward }}"
+   shared: True
+
+ - example: ipv4_loopback =
+   getval: 'ipv4_loopback = (?P<ipv4_loopback>\S+)'
+   result:
+      ipv4_loopback: "{{ ipv4_loopback }}"
+   shared: True
+
+ - example: ipv6_loopback =
+   getval: 'ipv6_loopback = (?P<ipv6_loopback>\S+)'
+   result:
+      ipv6_loopback: "{{ ipv6_loopback }}"
+   shared: True
+
+ - example: reverse_path_filtering = strict_mode
+   getval: 'reverse_path_filtering = (?P<reverse_path_filtering>\S+)'
+   result:
+      reverse_path_filtering: "{{ reverse_path_filtering }}"
+   shared: True
+
+ - example: enable_multiple_routing_tables = yes
+   getval: 'enable_multiple_routing_tables = (?P<enable_multiple_routing_tables>\S+)'
+   result:
+      enable_multiple_routing_tables: "{{ enable_multiple_routing_tables }}"
+   shared: True
+
+ - example: enable_network_failover = yes
+   getval: 'enable_network_failover = (?P<enable_network_failover>\S+)'
+   result:
+      enable_network_failover: "{{ enable_network_failover }}"
+   shared: True
+
+ - example: enable_primary_failover_by_ip_address = yes
+   getval: 'enable_primary_failover_by_ip_address = (?P<enable_primary_failover_by_ip_address>\S+)'
+   result:
+      enable_primary_failover_by_ip_address: "{{ enable_primary_failover_by_ip_address }}"
+   shared: True
+
+ - example: trigger = ipv4_default_gateway
+   getval: 'trigger = (?P<trigger>\S+)'
+   result:
+      trigger: "{{ trigger }}"
+   shared: True
+
+ - example: enable_primary_failover_by_signal_strength = no
+   getval: 'enable_primary_failover_by_signal_strength = (?P<enable_primary_failover_by_signal_strength>\S+)'
+   result:
+      enable_primary_failover_by_signal_strength: "{{ enable_primary_failover_by_signal_strength }}"
+   shared: True
+
+ - example: enable_primary_failover_by_data_usage = no
+   getval: 'enable_primary_failover_by_data_usage = (?P<enable_primary_failover_by_data_usage>\S+)'
+   result:
+      enable_primary_failover_by_data_usage: "{{ enable_primary_failover_by_data_usage }}"
+   shared: True
+
+ - example: enable_primary_failover_by_schedule = no
+   getval: 'enable_primary_failover_by_schedule = (?P<enable_primary_failover_by_schedule>\S+)'
+   result:
+      enable_primary_failover_by_schedule: "{{ enable_primary_failover_by_schedule }}"
+   shared: True
+
+ - example: enable_primary_sim_failback_by_schedule = no
+   getval: 'enable_primary_sim_failback_by_schedule = (?P<enable_primary_sim_failback_by_schedule>\S+)'
+   result:
+      enable_primary_sim_failback_by_schedule: "{{ enable_primary_sim_failback_by_schedule }}"
+   shared: True
+
+ - example: enable_dynamic_dns = no
+   getval: 'enable_dynamic_dns = (?P<enable_dynamic_dns>\S+)'
+   result:
+      enable_dynamic_dns: "{{ enable_dynamic_dns }}"
+   shared: True
+
+ - example: enable_bluetooth_network = no
+   getval: 'enable_bluetooth_network = (?P<enable_bluetooth_network>\S+)'
+   result:
+      enable_bluetooth_network: "{{ enable_bluetooth_network }}"
+   shared: True

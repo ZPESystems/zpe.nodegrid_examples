@@ -1,0 +1,26 @@
+<group name="network_settings">
+hostname = {{ hostname | _line_ | strip() }}
+domain_name = {{ domain_name | _line_ | strip() }}
+enable_ipv4_ip_forward = {{ enable_ipv4_ip_forward | _line_ | strip() }}
+enable_ipv6_ip_forward = {{ enable_ipv6_ip_forward | _line_ | strip() }}
+ipv4_loopback = {{ ipv4_loopback | _line_ | strip() }}
+ipv6_loopback = {{ ipv6_loopback | _line_ | strip() }}
+reverse_path_filtering = {{ reverse_path_filtering | _line_ | strip() }}
+enable_multiple_routing_tables = {{ enable_multiple_routing_tables | _line_ | strip() }}
+enable_network_failover = {{ enable_network_failover | _line_ | strip() }}
+enable_primary_failover_by_ip_address = {{ enable_primary_failover_by_ip_address | _line_ | strip() }}
+trigger = {{ trigger | _line_ | strip() }}
+enable_primary_failover_by_signal_strength = {{ enable_primary_failover_by_signal_strength | _line_ | strip() }}
+enable_primary_failover_by_data_usage = {{ enable_primary_failover_by_data_usage | _line_ | strip() }}
+enable_primary_failover_by_schedule = {{ enable_primary_failover_by_schedule | _line_ | strip() }}
+enable_primary_sim_failback_by_schedule = {{ enable_primary_sim_failback_by_schedule | _line_ | strip() }}
+enable_third_level_network_failover = {{ enable_third_level_network_failover | _line_ | strip() }}
+enable_secondary_failover_by_ip_address = {{ enable_secondary_failover_by_ip_address | _line_ | strip() }}
+secondary_trigger = {{ secondary_trigger | _line_ | strip() }}
+enable_secondary_failover_by_signal_strength = {{ enable_secondary_failover_by_signal_strength | _line_ | strip() }}
+enable_secondary_failover_by_data_usage = {{ enable_secondary_failover_by_data_usage | _line_ | strip() }}
+enable_secondary_failover_by_schedule = {{ enable_secondary_failover_by_schedule | _line_ | strip() }}
+enable_secondary_sim_failback_by_schedule = {{ enable_secondary_sim_failback_by_schedule | _line_ | strip() }}
+enable_dynamic_dns = {{ enable_dynamic_dns | _line_ | strip() }}
+enable_bluetooth_network = {{ enable_bluetooth_network | _line_ | strip() }}
+</group>

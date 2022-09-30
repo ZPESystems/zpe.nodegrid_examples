@@ -1,0 +1,100 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+     ansible_remote_tmp: /tmp
+     ttp_package: /var/local/file_manager/admin_group/ansible/artefacts/installation/python3-ttp_0.9.1-r0_core2-64.ipk
+     ansible_cfg: /var/local/file_manager/admin_group/ansible/artefacts/installation/nodegrid_ansible.cfg.j2
+  vars_prompt:
+      - name: ssh_key
+        prompt: Entery a users ssh public key, this will enable that user to login to the ansible user with ssh
+
+
+  connection: local
+  tasks:
+    - name: setup ansible user
+      block:
+        - name: check if ansible user has an existing sshkey
+          file:
+            path: "/home/ansible/.ssh/id_ed25519"
+          ignore_errors: True
+          become: True
+          register: key
+
+        - name: Create sshkey if none exist
+          shell: 'ssh-keygen -t ed25519 -f /home/ansible/.ssh/id_ed25519 -N "" -C ansible@local'
+          ignore_errors: True
+          become: True
+          when: key.failed
+
+        - name: ensure proper permissions for sshkey
+          file:
+            path: "{{ item }}"
+            owner: ansible
+            group: ansible
+            mode: 0600
+            backup: yes
+          with_items:
+            - /home/ansible/.ssh/id_ed25519
+            - /home/ansible/.ssh/id_ed25519.pub
+          become: true
+
+        - name: Copy public key to tmp
+          shell: 'cp /home/ansible/.ssh/id_ed25519.pub /tmp/id_ed25519.pub'
+          become: True
+
+        - name: ensure proper permissions for public key in tmp
+          file:
+            path: "{{ item }}"
+            owner: ansible
+            group: ansible
+            mode: 0644
+            backup: yes
+          with_items:
+            - /tmp/id_ed25519.pub
+          become: True
+
+        - name: Update authorized key file
+          authorized_key:
+            user: "ansible"
+            key: "{{ lookup('file', '/tmp/id_ed25519.pub') }}"
+          become: True
+
+        - name: remove public_key from tmp
+          file:
+            path: /tmp/id_ed25519.pub
+            state: absent
+          ignore_errors: True
+          become: True
+
+    - name: add to ansible user to sudoers
+      block:
+        - name: add to ansible user to sudoers
+          copy:
+            src: '/var/local/file_manager/admin_group/ansible/artefacts/installation/nodegrid_ansible_sudoers.j2'
+            dest: '/etc/sudoers.d/ansible'
+            owner: root
+            group: root
+            mode: 600
+          become: True
+
+    - name: Copy ansible.zip to ansible home directory
+      block:
+        - name: copy ansible.zip to home directory
+          shell: 'cp /var/local/file_manager/admin_group/ansible.zip /home/ansible/'
+          become: True
+
+        - name: ensure proper permissions for zip file
+          file:
+            path: "/home/ansible/ansible.zip"
+            owner: ansible
+            group: ansible
+            mode: 0640
+          become: True
+
+    - name: Push ssh_key form remote access
+      block:
+      - name: setup localuser
+        authorized_key:
+          user: "ansible"
+          key: "{{ ssh_key }}"
+        become: True

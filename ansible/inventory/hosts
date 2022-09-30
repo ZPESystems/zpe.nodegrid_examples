@@ -1,0 +1,4 @@
+localhost:
+  hosts:
+    localhost:
+      ansible_user: ansible

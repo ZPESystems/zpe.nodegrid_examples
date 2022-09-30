@@ -1,0 +1,19 @@
+<group name="about">
+system: {{ system | _line_ | strip() }}
+licenses: {{ licenses | _line_ | strip() }}
+software: v{{ version_major }}.{{ version }}.{{ version_minor }} {{ version_date | _line_ | strip() }}
+cpu: {{ cpu | _line_ | strip() }}
+cpu_cores: {{ cpu_cores | _line_ | strip() }}
+bogomips_per_core: {{ bogomips | _line_ | strip() }}
+serial_number: {{ serial_number | _line_ | strip() }}
+uptime: {{ uptime_days }} days,  {{ uptime_hours }} hours,  {{ uptime_minutes }} minutes
+boot mode: {{ boot_mode | _line_ | strip() }}
+secure boot: {{ secure_boot | _line_ | strip() }}
+model: {{ model | _line_ | strip() }}
+part_number: {{ part_number | _line_ | strip() }}
+bios_version: {{ bios_version | _line_ | strip() }}
+psu: {{ psu | _line_ | strip() }}
+revision tag: {{ revision_tag | _line_ | strip() }}
+bios sed compatible: {{ bios_sed | _line_ | strip() }}
+ssd sed compatible: {{ ssd_sed | _line_ | strip() }}
+</group>

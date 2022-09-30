@@ -1,0 +1,26 @@
+<group name="system_status">
+Version: {{ version | _line_ | strip() }}
+Virus-DB: {{ virus_db | _line_ | strip() }}
+Extended DB: {{ extended_db | _line_ | strip() }}
+IPS-DB: {{ ips_db | _line_ | strip() }}
+IPS-ETDB: {{ ips_etdb | _line_ | strip() }}
+APP-DB: {{ app_db | _line_ | strip() }}
+INDUSTRIAL-DB: {{ industrial_db | _line_ | strip() }}
+Serial-Number: {{ serialnumber | _line_ | strip() }}
+Botnet DB: {{ botnet_db | _line_ | strip() }}
+BIOS version: {{ bios_version | _line_ | strip() }}
+System Part-Number: {{ part_number | _line_ | strip() }}
+Log hard disk: {{ log_hard_disk | _line_ | strip() }}
+Hostname: {{ hostname | _line_ | strip() }}
+Private Encryption: {{ private_encryption | _line_ | strip() }}
+Operation Mode: {{ operation_mode | _line_ | strip() }}
+Current virtual domain: {{ current_virtual_domain | _line_ | strip() }}
+Max number of virtual domains: {{ max_virtual_domains | _line_ | strip() }}
+Virtual domains status: {{ virtual_domain_status | _line_ | strip() }}
+Virtual domain configuration: {{ virtual_domain_configuration | _line_ | strip() }}
+FIPS-CC mode: {{ fips_cc_mode | _line_ | strip() }}
+Current HA mode: {{ current_ha_mode | _line_ | strip() }}
+Branch point: {{ branch_point | _line_ | strip() }}
+Release Version Information: {{ release_version_information | _line_ | strip() }}
+System time: {{ system_time | _line_ | strip() }}
+</group>

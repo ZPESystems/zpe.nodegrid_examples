@@ -1,0 +1,3 @@
+<group name="network_statistics.{{ ifname }}">
+  {{ ifname | _start_ }}  {{ ifindex }}   {{ state | contains('up','down') }}   {{ rx_packets }}  {{ tx_packets }}  {{ collisions }} {{ dropped }} {{ errors }}
+</group>

@@ -1,0 +1,10 @@
+show chassis detail
+Chassis:
+    Power: on
+    Power Button: unlocked
+    Serial Number: FGL233030RF
+    Product Name: ENCS
+    PID : ENCS5406/K9
+    UUID: 2C4F528E-5930-0000-B138-922FAF756F05
+    Description:
+ENCS5406-FGL233030RF#

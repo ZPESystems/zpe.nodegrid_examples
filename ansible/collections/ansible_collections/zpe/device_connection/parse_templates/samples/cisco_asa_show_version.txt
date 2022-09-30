@@ -1,0 +1,60 @@
+Cisco Adaptive Security Appliance Software Version 9.8(2)
+Firepower Extensible Operating System Version 2.2(2.52)
+Device Manager Version 7.8(2)
+
+Compiled on Sun 27-Aug-17 13:06 PDT by builders
+System image file is "disk0:/asa982-lfbff-k8.SPA"
+Config file at boot was "startup-config"
+
+ciscoasa up 6 hours 40 mins
+
+Hardware:   ASA5508, 8192 MB RAM, CPU Atom C2000 series 2000 MHz, 1 CPU (8 cores)
+Internal ATA Compact Flash, 8000MB
+BIOS Flash M25P64 @ 0xfed01000, 16384KB
+
+Encryption hardware device : Cisco ASA Crypto on-board accelerator (revision 0x1)
+                             Number of accelerators: 1
+
+ 1: Ext: GigabitEthernet1/1  : address is a093.513a.0026, irq 255
+ 2: Ext: GigabitEthernet1/2  : address is a093.513a.0027, irq 255
+ 3: Ext: GigabitEthernet1/3  : address is a093.513a.0028, irq 255
+ 4: Ext: GigabitEthernet1/4  : address is a093.513a.0029, irq 255
+ 5: Ext: GigabitEthernet1/5  : address is a093.513a.002a, irq 255
+ 6: Ext: GigabitEthernet1/6  : address is a093.513a.002b, irq 255
+ 7: Ext: GigabitEthernet1/7  : address is a093.513a.002c, irq 255
+ 8: Ext: GigabitEthernet1/8  : address is a093.513a.002d, irq 255
+ 9: Int: Internal-Data1/1    : address is a093.513a.0025, irq 255
+10: Int: Internal-Data1/2    : address is 0000.0001.0002, irq 0
+11: Int: Internal-Control1/1 : address is 0000.0001.0001, irq 0
+12: Int: Internal-Data1/3    : address is 0000.0001.0003, irq 0
+13: Ext: Management1/1       : address is a093.513a.0025, irq 0
+14: Int: Internal-Data1/4    : address is 0000.0100.0001, irq 0
+
+Licensed features for this platform:
+Maximum Physical Interfaces       : Unlimited      perpetual
+Maximum VLANs                     : 50             perpetual
+Inside Hosts                      : Unlimited      perpetual
+Failover                          : Active/Active  perpetual
+Encryption-DES                    : Enabled        perpetual
+Encryption-3DES-AES               : Enabled        perpetual
+Security Contexts                 : 2              perpetual
+Carrier                           : Disabled       perpetual
+AnyConnect Premium Peers          : 4              perpetual
+AnyConnect Essentials             : Disabled       perpetual
+Other VPN Peers                   : 100            perpetual
+Total VPN Peers                   : 100            perpetual
+AnyConnect for Mobile             : Disabled       perpetual
+AnyConnect for Cisco VPN Phone    : Disabled       perpetual
+Advanced Endpoint Assessment      : Disabled       perpetual
+Shared License                    : Disabled       perpetual
+Total TLS Proxy Sessions          : 320            perpetual
+Botnet Traffic Filter             : Disabled       perpetual
+Cluster                           : Disabled       perpetual
+VPN Load Balancing                : Enabled        perpetual
+
+Serial Number: JAD222006SU
+Running Permanent Activation Key: 0x6808c146 0xb4eb96a9 0x841261a0 0x9cf8ec58 0xc6042188
+Configuration register is 0x1
+Image type                : Release
+Key Version               : A
+Configuration last modified by enable_15 at 12:50:44.589 UTC Mon May 30 2022

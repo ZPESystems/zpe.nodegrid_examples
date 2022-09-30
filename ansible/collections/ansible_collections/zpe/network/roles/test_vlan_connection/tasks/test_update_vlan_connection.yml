@@ -1,0 +1,43 @@
+- name: Update Connection - VLAN ID and IPv4
+  zpe.network.connection:
+    connection_name: "CONNECTION_TEST_VLAN"
+    connection_type: 'vlan'
+    ethernet_interface: 'eth0'
+    connect_automatically: 'yes'
+    ipv4_mode: 'static'
+    ipv4_address: '192.168.0.21'
+    ipv4_bitmask: '24'
+    ipv4_dns_server: '8.8.8.8'
+    ipv4_gateway: '192.168.0.1'
+    vlan_id: '100'
+  register: output
+
+#- name: Update Connection - VLAN ID and IPv4 - Check Result
+#  assert:
+#    that:
+#      - output.change_action == 'update'
+#      - output.changed == True
+#      - output.failed == False
+#      - output.import_result.state == 'success'
+
+- name: Update Connection - VLAN ID and IPv4 - Validation
+  zpe.network.connection:
+    connection_name: "CONNECTION_TEST_VLAN"
+    connection_type: 'vlan'
+    ethernet_interface: 'eth0'
+    connect_automatically: 'yes'
+    ipv4_mode: 'static'
+    ipv4_address: '192.168.0.21'
+    ipv4_bitmask: '24'
+    ipv4_dns_server: '8.8.8.8'
+    ipv4_gateway: '192.168.0.1'
+    vlan_id: '100'
+  check_mode: True
+  register: output
+
+#- name: Update Connection - VLAN ID and IPv4 - Validation - Check Result
+#  assert:
+#    that:
+#      - output.change_action == 'update'
+#      - output.changed == False
+#      - output.failed == False

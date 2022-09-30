@@ -1,0 +1,3 @@
+<group name="switch_vlans.{{ vlan }}">
+  vlan  untagged                                  tagged         {{ _headers_ | columns(3) }}
+</group>

@@ -1,0 +1,6 @@
+<group name="network_connections.{{ connection_name }}">
+  {{ connection_name | _start_ }}  {{ status }}   {{ type }}  {{ interface }}  {{ state | equal("up")}} {{ ipv4 | contains('.')}}/{{ ipv4_mask }}  {{ ipv6 | contains(':') }}/{{ ipv6_prefix }}    {{ mac | _line_ | strip() }}
+  {{ connection_name | _start_ }}  {{ status }}   {{ type }}  {{ interface }}  {{ state | equal("up")}} {{ ipv6 | contains(':') }}/{{ ipv6_prefix }} {{ mac | _line_ | strip() }}
+  {{ connection_name | _start_ }}  {{ status }}   {{ type }}  {{ interface }}  {{ state | equal("up")}} {{ ipv4 | contains('.') }}/{{ ipv4_mask }} {{ mac  | _line_ | strip() }}
+  {{ connection_name | _start_ }}  {{ status }}   {{ type }}  {{ interface }}  {{ state | equal("down")}} {{ mac | _line_ | strip() }}
+</group>

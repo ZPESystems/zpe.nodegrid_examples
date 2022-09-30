@@ -1,0 +1,28 @@
+- name: Delete Connection
+  zpe.network.connection:
+    connection_name: "CONNECTION_TEST_CELL"
+    state: 'absent'
+  register: output
+
+#- name: Check Result
+#  assert:
+#    that:
+#      - output.change_action == 'delete'
+#      - output.changed == True
+#      - output.failed == false
+#      - output.message == 'Connection CONNECTION_TEST_CELL was successfully delete'
+
+- name: Delete Connection - No Connection exist - Validate
+  zpe.network.connection:
+    connection_name: "CONNECTION_TEST_CELL"
+    state: 'absent'
+  check_mode:
+  register: output
+
+#- name: Check Result
+#  assert:
+#    that:
+#      - output.change_action == 'no_action'
+#      - output.changed == False
+#      - output.failed == false
+#      - output.message == 'No change to connection CONNECTION_TEST_CELL, update was not required'

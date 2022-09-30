@@ -1,0 +1,6 @@
+<group name="routing_table_ipv4.{{ table }}">
+  {{ destination | _start_ | contains('.')}}  {{ gateway }}   {{ metric }}  {{ interface }}  {{ from }} {{ table }}
+</group>
+<group name="routing_table_ipv6.{{ table }}">
+  {{ destination | _start_ | contains(':')}}  {{ gateway }}   {{ metric }}  {{ interface }}  {{ from }} {{ table }}
+</group>

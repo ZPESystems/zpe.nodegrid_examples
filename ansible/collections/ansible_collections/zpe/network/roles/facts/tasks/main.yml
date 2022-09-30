@@ -1,0 +1,9 @@
+- name: Get Facts
+  zpe.network.facts:
+  register: output
+
+- name: output
+  debug:
+    var: output
+
+

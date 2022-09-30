@@ -1,0 +1,10 @@
+<group name="show_version">
+Hostname: {{ hostname | _line_ | strip() }}
+Model: {{ model | _line_ | strip() }}
+Junos: {{ version | _line_ | strip() }}
+JUNOS EX  Software Suite [{{ junos_ex_software_suite | _line_ | strip() }}]
+JUNOS FIPS mode utilities [{{ junos_fips_mode_ultilities | _line_ | strip() }}]
+JUNOS Online Documentation [{{ junos_online_documentation | _line_ | strip() }}]
+JUNOS EX 2200 Software Suite [{{ junos_ex_2200_software_suite | _line_ | strip() }}]
+JUNOS Web Management Platform Package [{{ junos_web_managment_platform | _line_ | strip() }}]
+</group>

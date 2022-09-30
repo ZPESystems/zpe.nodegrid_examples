@@ -1,0 +1,3 @@
+<group name="thermal">
+  {{ name }}  {{ value | isdigit }}  {{ unit }}  {{ description | _line_ | strip() }}
+</group>

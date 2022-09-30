@@ -1,0 +1,4 @@
+<group name="switch_interface.{{ interface }} ">
+  {{ interface | _start_}}      {{ status }}   {{ speed }}   {{ port_vlan }}  {{ jumbo_frame }}
+  {{ interface | _start_}}      {{ status }}  {{ description }}  {{ speed }}   {{ port_vlan }}  {{ jumbo_frame }}
+</group>

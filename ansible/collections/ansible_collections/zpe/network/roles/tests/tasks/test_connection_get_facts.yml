@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: False
+  collections:
+    - zpe.network
+  roles:
+    - facts
+
+
+

@@ -1,0 +1,31 @@
+platform-detail hardware_info Manufacturer "Cisco Systems, Inc."
+platform-detail hardware_info PID ENCS5406/K9
+platform-detail hardware_info SN FGL233030RF
+platform-detail hardware_info hardware-version M3
+platform-detail hardware_info UUID 2C4F528E-5930-0000-B138-922FAF756F05
+platform-detail hardware_info Version 3.8.1-FC3
+platform-detail hardware_info Compile_Time "Sunday, April 15, 2018 [20:38:10 PDT]"
+platform-detail hardware_info CPU_Information "Intel(R) Xeon(R) CPU D-1528 @ 1.90GHz 6 cores"
+platform-detail hardware_info Memory_Information "32743048 kB"
+platform-detail hardware_info Disk_Size "64.0 GB"
+platform-detail hardware_info CIMC_IP NA
+platform-detail hardware_info Entity-Name ENCS
+platform-detail hardware_info Entity-Desc "Enterprise Network Compute System"
+platform-detail software_packages Kernel_Version 3.10.0-514.21.1.1.el7.x86_64
+platform-detail software_packages QEMU_Version 1.5.3
+platform-detail software_packages LibVirt_Version 3.2.0
+platform-detail software_packages OVS_Version 2.5.2
+platform-detail switch_detail UUID NA
+platform-detail switch_detail Type NA
+platform-detail switch_detail Name NA
+platform-detail switch_detail Ports 8
+                                                                     PCI
+NAME   TYPE      MEDIA         LINK  SPEED  MTU   MAC                DETAIL
+------------------------------------------------------------------------------
+GE0-0  physical  Twisted Pair  up    1000   9216  2c:4f:52:8e:58:b0  02:00.0
+GE0-1  physical  Fibre         down  0      9216  2c:4f:52:8e:58:b1  02:00.1
+MGMT   physical  Twisted Pair  up    1000   1500  2c:4f:52:8e:59:24  0e:00.0
+
+
+System message at 2022-01-19 14:54:31...
+Commit performed by admin via http using rest.

@@ -1,0 +1,7 @@
+- hosts: all
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: install dependencies
+      shell: 'python3 -m pip install ttp --no-index --find-links=./artefacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
