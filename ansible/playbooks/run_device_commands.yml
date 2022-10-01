@@ -1,0 +1,29 @@
+- hosts: all
+  gather_facts: false
+  collections:
+    - zpe.device_connection
+  vars_prompt:
+      - name: target
+        prompt: Enter target name, either ttyS or current device name
+      - name: username
+        prompt: Enter username
+      - name: password
+        prompt: Enter target password
+      - name: target
+        prompt: Enter target_os [generic, ios, junos,panos,fortios]
+        default: generic
+
+  tasks:
+  - name: Run commands
+    run_command:
+        target: "{{ target }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        target_os: "{{ target_os }}"
+        cmds:
+          - 'show version'
+    register: cmds_output
+
+  - name: Print command results
+    debug:
+      var: cmds_output
