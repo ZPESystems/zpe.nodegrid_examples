@@ -1,3 +1,0 @@
-<group name="usb_sensors">
-  {{ name }}  {{ value | contains('.') }}  {{ unit }}  {{ description | _line_ | strip() }}
-</group>

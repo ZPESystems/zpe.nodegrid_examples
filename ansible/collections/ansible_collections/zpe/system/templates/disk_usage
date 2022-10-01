@@ -1,3 +1,0 @@
-<group name="disk_usage">
-  {{ partition }}  {{ size | isdigit }}  {{ used_kb }}  {{ available_kb }}  {{ use }}  {{ description }}
-</group>

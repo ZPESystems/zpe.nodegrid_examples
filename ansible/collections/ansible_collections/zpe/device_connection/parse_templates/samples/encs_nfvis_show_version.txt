@@ -1,4 +1,0 @@
-Cisco NFV Infrastructure Software
-Version 3.8.1-FC3
-Build date Sunday, April 15, 2018 [20:38:10 PDT]
-Last Reboot Saturday, January 08 [00:43]

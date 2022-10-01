@@ -1,8 +1,0 @@
-- name: Update Date and Time
-  zpe.system.date_and_time:
-      date_and_time: "network_time_protocol"
-      server: "pool.ntp.org"
-      zone: "utc"
-      enable_date_and_time_synchronization: "no"
-  check_mode: yes
-  register: output

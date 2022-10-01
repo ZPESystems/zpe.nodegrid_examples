@@ -1,8 +1,0 @@
-- name: Delete Connection
-  include: test_delete_ethernet_connection.yml
-
-- name: Create Connection
-  include: test_create_ethernet_connection.yml
-
-- name: Update Connection
-  include: test_update_ethernet_connection.yml

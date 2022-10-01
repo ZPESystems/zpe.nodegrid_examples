@@ -1,5 +1,0 @@
-<group name="switch_statistics.{{ interface }}">
-  {{ interface | _start_ }}  {{ status }}   {{ state | contains('Up','Down')}}  {{ speed }}  {{ rx_packets }} {{ tx_packets }}
-  {{ interface | _start_ }}  {{ status }}   {{ state | contains('Up','Down')}}  {{ speed }}  {{ rx_packets }} {{ tx_packets }} {{ other }}
-  {{ interface | _start_ }}  {{ status }}   {{ state | contains('Up','Down')}}  {{ speed }}  {{ rx_packets }} {{ tx_packets }} {{ other }} {{ description }}
-</group>

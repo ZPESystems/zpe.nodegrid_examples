@@ -2,9 +2,12 @@
   gather_facts: false
   vars:
      ansible_remote_tmp: /tmp
+     ttp_package: /var/local/file_manager/admin_group/ansible/artefacts/installation/python3-ttp_0.9.1-r0_core2-64.ipk
+     ansible_cfg: /var/local/file_manager/admin_group/ansible/artefacts/installation/nodegrid_ansible.cfg.j2
   vars_prompt:
       - name: ssh_key
         prompt: Entery a users ssh public key, this will enable that user to login to the ansible user with ssh
+
 
   connection: local
   tasks:
@@ -74,10 +77,27 @@
             mode: 600
           become: True
 
-    - name: Push ssh_key for remote access
+    - name: Copy ansible.zip to ansible home directory
+      block:
+        - name: copy ansible.zip to home directory
+          shell: 'cp /var/local/file_manager/admin_group/ansible.zip /home/ansible/'
+          become: True
+
+        - name: ensure proper permissions for zip file
+          file:
+            path: "/home/ansible/ansible.zip"
+            owner: ansible
+            group: ansible
+            mode: 0640
+          become: True
+
+    - name: Push ssh_key form remote access
       block:
       - name: setup localuser
         authorized_key:
           user: "ansible"
           key: "{{ ssh_key }}"
         become: True
+
+
+

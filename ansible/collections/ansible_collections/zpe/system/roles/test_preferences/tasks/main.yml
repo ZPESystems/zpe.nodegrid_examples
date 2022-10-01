@@ -1,8 +1,0 @@
-- name: Update System Preferences
-  zpe.system.preferences:
-      show_hostname_on_webui_header: "yes"
-      idle_timeout: "3600"
-      enable_banner: "yes"
-      enable_alarm_sound_when_one_power_supply_is_powered_off: "no"
-  check_mode: yes
-  register: output

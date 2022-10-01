@@ -1,3 +1,0 @@
-<group name="hostname">
-[admin@{{ hostname | _start_ }} /]#
-</group>

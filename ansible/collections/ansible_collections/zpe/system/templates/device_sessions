@@ -1,3 +1,0 @@
-<group name="device_sessions.{{ device }}">
-  {{ device | _start_ }}      {{ number_of_sessions | isdigit }}  {{ user }}
-</group>

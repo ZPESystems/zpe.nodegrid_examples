@@ -1,7 +1,24 @@
-- hosts: all
+- hosts: localhost
   gather_facts: false
   connection: local
 
   tasks:
+    - name: setup ansible
+      block:
+        - name: create collections folder
+          file:
+            path: "/etc/ansible/collections"
+            state: directory
+
+        - name: update ansible.cfg
+          copy:
+            src: /var/local/file_manager/admin_group/ansible/artefacts/installation/nodegrid_ansible.cfg.j2
+            dest: /etc/ansible/ansible.cfg
+            owner: ansible
+            group: ansible
+
     - name: install dependencies
-      shell: 'python3 -m pip install ttp --no-index --find-links=./artefacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
+      shell: 'python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/ansible/artefacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
+
+    - name: Install collections
+      shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/ansible/artefacts/collections/requirements.yml -p /etc/ansible/collections'

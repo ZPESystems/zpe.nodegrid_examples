@@ -1,3 +1,0 @@
-<group name="cpu_usage">
-  {{ user | isdigit }}       {{ system }}         {{ idle }}      {{ waiting }}
-</group>

@@ -1,6 +1,0 @@
-- hosts: all
-  gather_facts: false
-  collections:
-    - zpe.network
-  roles:
-    - test_vlan_connection

@@ -1,5 +1,0 @@
-show version
-Firmware Version
-------------------------
-3.2(4.20180315121704)
-ENCS5406-FGL233030RF#
