@@ -1,0 +1,94 @@
+- hosts: all
+  gather_facts: false
+  collections:
+    - zpe.device_connection
+  vars:
+    NETBOX_URL: https://<URL>
+    NETBOX_API_TOKEN: <API_Token>
+
+  tasks:
+  - name: Get Device Facts from a Managed Device
+    zpe.device_connection.fact:
+        target: "{{ custom_fields.console_server_port }}"
+        username: "{{ console_username }}"
+        password: "{{ console_password }}"
+        target_os: "{{ ansible_network_os }}"
+    delegate_to: "{{ item.value.device.display }}"
+    loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_Token>",
+                      validate_certs=false) }}'
+    loop_control:
+        label: "{{ item.value.device.display }} - {{ item.value.name }}"
+    when: inventory_hostname == item.value.label
+
+  - name: show Ansible_facts
+    debug:
+      var: ansible_facts
+
+  - name: "TASK 100: NETBOX >> ADD DEVICE TO NETBOX >> FORTIOS"
+    netbox.netbox.netbox_device:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          name: "{{ inventory_hostname }}"
+          serial: "{{ ansible_facts.system_status.serialnumber }}"
+          site: “DEMO"
+          custom_fields:
+            version: "{{ ansible_facts.system_status.version }}"
+            bios_version: "{{ ansible_facts.system_status.bios_version }}"
+          local_context_data: "{{ ansible_facts.system_status }}"
+    when: ansible_network_os == 'fortios'
+    connection: local
+
+  - name: Get Backup of OOB Managment interface configuration
+    run_command:
+            target:  "{{ item.value.label }}"
+            username: "{{ console_username }}"
+            password: "{{ console_password }}"
+            target_os: "{{ ansible_network_os }}"
+            cmds:
+              - cmd: 'show system interface internal'
+                template: fortinet_show_system_interface
+                template_paths:
+                   - '/home/ec2-user/template'
+    delegate_to: "{{ item.value.device.display }}"
+    loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_Token>",
+                      validate_certs=false) }}'
+    loop_control:
+            label: "{{ item.value.device.display }} - {{ item.value.name }}"
+    when: inventory_hostname == item.value.label
+    register: cmds_output
+
+  - name: Show
+    debug:
+      var: ansible_facts
+
+  - name: "TASK 210: NETBOX >> ADD IP ADDRESS"
+    netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          address: "{{ ansible_facts.internal.ipv4_address }}/{{ ansible_facts.internal.ipv4_subnetmask }}"
+          assigned_object:
+            device: "{{ inventory_hostname }}"
+            name: "internal"
+    connection: local
+
+  - name: "TASK 210: NETBOX >> SET PRIMARY IP ADDRESS"
+    netbox.netbox.netbox_device:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          name: "{{ inventory_hostname }}"
+          primary_ip4: "{{ ansible_facts.internal.ipv4_address }}"
+    connection: local

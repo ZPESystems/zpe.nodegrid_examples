@@ -2,6 +2,16 @@
   gather_facts: false
   collections:
     - zpe.device_connection
+  vars_prompt:
+      - name: target
+        prompt: Enter target name, either ttyS or current device name
+      - name: username
+        prompt: Enter username
+      - name: password
+        prompt: Enter target password
+      - name: target
+        prompt: Enter target_os [generic, ios, junos,panos,fortios]
+        default: generic
 
   tasks:
   - name: Get Device Facts from a Managed Device

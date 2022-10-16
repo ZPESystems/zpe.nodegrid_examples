@@ -1,0 +1,57 @@
+- hosts: nsr01
+  gather_facts: false
+  collections:
+    - zpe.network
+  vars:
+    NETBOX_URL: https://<URL>
+    NETBOX_API_TOKEN: <API_Token>
+  tasks:
+
+    - name: Get Network Facts from Nodegrid
+      zpe.network.facts:
+
+    - name: "TASK 100: NETBOX >> ADD DEVICE TO NETBOX"
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          name: "{{ inventory_hostname }}"
+          device_type: "{{ ansible_facts.about.part_number }}"
+          platform: nodegridos  # May be able to use a filter to define in future
+          serial: "{{ ansible_facts.about.serial_number }}"
+          status: Active
+          device_role: "oob-network"
+          site: “DEMO"
+          custom_fields:
+            version: "{{ ansible_facts.about.version_major }}.{{ ansible_facts.about.version }}.{{ ansible_facts.about.version_minor }}"
+            revision_tag: "{{ ansible_facts.about.revision_tag }}"
+            bios_version: "{{ ansible_facts.about.bios_version }}"
+          local_context_data: "{{ ansible_facts.network_settings }}"
+      connection: local
+
+    - name: "TASK 101: NETBOX >> UPDATE DEVICE INTERFACE TO NETBOX"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          device: "{{ inventory_hostname }}"
+          name: "{{ ansible_facts.network_connections[item].interface }}"
+          mac_address: "{{ ansible_facts.network_connections[item].mac }}"
+      with_items: "{{ ansible_facts.network_connections }}"
+      connection: local
+
+    - name: "TASK 210: NETBOX >> ADD IP ADDRESS OF ANSIBLE HOST"
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ NETBOX_URL }}"
+        netbox_token: "{{ NETBOX_API_TOKEN }}"
+        validate_certs: False
+        data:
+          family: 4
+          address: "{{ ansible_facts.network_connections[item].ipv4 }}/{{ ansible_facts.network_connections[item].ipv4_mask }}"
+          assigned_object:
+            device: "{{ inventory_hostname }}"
+            name: "{{ ansible_facts.network_connections[item].interface }}"
+      with_items: "{{ ansible_facts.network_connections }}"
+      connection: local
