@@ -1,0 +1,44 @@
+- hosts: all
+  gather_facts: false
+  collections:
+    - zpe.device_connection
+  vars:
+    NETBOX_URL: https://<URL>
+    NETBOX_API_TOKEN: <API_TOKEN>
+
+  tasks:
+  - name: Create Backup on Fortinet and store Localy on Nodegrid
+    zpe.device_connection.run_command:
+        target: "{{ item.value.label }}"
+        username: "{{ console_username }}"
+        password: "{{ console_password }}"
+        target_os: "{{ ansible_network_os }}"
+        cmds:
+          - 'execute backup config ftp {{ inventory_hostname }}.cfg 192.168.1.110 ftpuser ftpuser'
+    delegate_to: "{{ item.value.device.display }}"
+    loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_TOKEN>",
+                      validate_certs=false) }}'
+    loop_control:
+        label: "{{ item.value.device.display }} - {{ item.value.name }}"
+    when: inventory_hostname == item.value.label
+
+  - name: Check file was created
+    file:
+      dest: /home/ftpuser/<inventory_hostname>.cfg
+      state: file
+    become: True
+    check_mode: true
+    delegate_to: "{{ item.value.device.display }}"
+    loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_TOKEN>",
+                      validate_certs=false) }}'
+    loop_control:
+        label: "{{ item.value.device.display }} - {{ item.value.name }}"
+    when: inventory_hostname == item.value.label

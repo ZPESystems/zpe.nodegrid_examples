@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: false
+  collections:
+    - zpe.device_connection
+  var:
+    template_location: ./template
+
+  tasks:
+    - name: Run command on a device
+      run_command:
+        target: "{{ target }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        target_os: "{{ target_os }}"
+        cmds:
+            - cmd: 'show system interface internal'
+              template: fortinet_show_system_interface
+              template_paths:
+                - '{{ template_location }}'
+      register: cmds_output
+
+    - name: Show
+      debug:
+        var: cmds_output

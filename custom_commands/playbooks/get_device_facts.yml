@@ -1,0 +1,29 @@
+- hosts: all
+  gather_facts: false
+  collections:
+    - zpe.device_connection
+    - zpe.system
+
+  tasks:
+  - name: Get Device Facts from a Managed Device
+    zpe.device_connection.fact:
+        target: "{{ inventory_hostname }}"
+        username: "{{ customfields.console_username }}"
+        password: "{{ customfields.console_password }}"
+        target_os: "{{ customfields.target_os }}"
+
+  - name: show Ansible_facts
+    debug:
+      var: ansible_facts
+
+  - name: Update device details on Nodegrid
+    zpe.system.nodegrid_import:
+       cmds:
+         - "/settings/devices/{{ inventory_hostname }}/custom_fields/version field_name=version"
+         - '/settings/devices/{{ inventory_hostname }}/custom_fields/version field_value="{{ ansible_facts.system_status.branch_point }}"'
+         - "/settings/devices/{{ inventory_hostname }}/custom_fields/part_number field_name=part_number"
+         - '/settings/devices/{{ inventory_hostname }}/custom_fields/part_number field_value="{{ ansible_facts.system_status.part_number }}"'
+         - "/settings/devices/{{ inventory_hostname }}/custom_fields/serialnumber field_name=serialnumber"
+         - '/settings/devices/{{ inventory_hostname }}/custom_fields/serialnumber field_value="{{ ansible_facts.system_status.serialnumber }}"'
+         - "/settings/devices/{{ ansible_facts.system_status.hostname }} {spm_rename},ttyS1-1,spm_name"
+    delegate_to: localhost

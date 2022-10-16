@@ -1,0 +1,94 @@
+- hosts: all
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - zpe.device_connection
+    - fortinet.fortios
+  vars:
+    NETBOX_URL: https://<URL>
+    NETBOX_API_TOKEN: <API_TOKEN>
+    vdom: "root"
+    ansible_httpapi_use_ssl: yes
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 443
+    allowaccess: ["ping"]
+
+  tasks:
+    - name: Create Backup via OOB
+      block:
+       - name: Get Backup of OOB Managment interface configuration
+         run_command:
+            target:  "{{ item.value.label }}"
+            username: "{{ console_username }}"
+            password: "{{ console_password }}"
+            target_os: "{{ ansible_network_os }}"
+            cmds:
+              - 'show system interface internal'
+         delegate_to: "{{ item.value.device.display }}"
+         loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_TOKEN>",
+                      validate_certs=false) }}'
+         loop_control:
+            label: "{{ item.value.device.display }} - {{ item.value.name }}"
+         when: inventory_hostname == item.value.label
+         connection: ssh
+         register: cmds_output
+
+       - name: Extract config from output
+         set_fact:
+           cmd_output: "{{ cmds_output.results | selectattr('output','defined') | map(attribute='output') }}"
+
+    - name: Write config to local file as backup
+        copy:
+          content: "{{ item.stdout }}"
+          dest: "~/{{ inventory_hostname }}_interfaces.log"
+        with_items: "{{ cmd_output }}"
+        loop_control:
+          label: "{{item.cmd }}"
+        delegate_to: localhost
+
+    - name: Config Changes, normal automation using the default management interface
+      block:
+        - name: Configure a network interface on the Fortinet
+          fortios_system_interface:
+            vdom: "{{ vdom }}"
+            state: "present"
+            system_interface:
+              allowaccess: "{{ allowaccess }}"
+              description: "internal interface"
+              name: "internal"
+          ignore_errors: yes
+
+        - name: Sleep for 15 seconds and ensure that config was fully applied
+          ansible.builtin.wait_for:
+            timeout: 15
+          delegate_to: localhost
+
+        - name: fetch system status and ensure we can still talk to the device through the management interface
+          fortios_configuration_fact:
+            selector: system_status
+          ignore_errors: yes
+          register: config_change
+
+    - name: restore the management interface config, in case communication is not possiable anymore
+      run_command:
+        target: "{{ item.value.label }}"
+        username: "{{ console_username }}"
+        password: "{{ console_password }}"
+        target_os: "{{ ansible_network_os }}"
+        cmds:
+          - "{{lookup('ansible.builtin.file', '~/{{ inventory_hostname }}_interfaces_gold.log') }}"
+      delegate_to: "{{ item.value.device.display }}"
+      loop: '{{ query("netbox.netbox.nb_lookup",
+                      "console-server-ports",
+                      api_filter="label=<inventory_hostname>",
+                      api_endpoint="https://<URL>",
+                      token="<API_TOKEN>",
+                      validate_certs=false) }}'
+      loop_control:
+            label: "{{ item.value.device.display }} - {{ item.value.name }}"
+      when: inventory_hostname == item.value.label and config_change.failed
+      connection: ssh
