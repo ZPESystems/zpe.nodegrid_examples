@@ -1,9 +1,0 @@
-<group name="{{interface_name}}">
-    edit {{interface_name | replace('\"','') | strip()}}
-        set vdom {{vdom | replace('\"','') | strip() }}
-        set ip {{ipv4_address | strip() }} {{ ipv4_subnetmask | strip() }}
-        set allowaccess {{allowaccess | _line_ | strip() }}
-        set type {{type | strip() }}
-        set role {{role | strip() }}
-        set snmp-index {{index | strip() }}
-</group>
