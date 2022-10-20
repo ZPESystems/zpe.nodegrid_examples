@@ -94,7 +94,7 @@
       block:
       - name: Copy New Version files to Nodegrid
         copy:
-           src: '~/artefacts/{{ new_version }}'
+           src: '~/artifacts/{{ new_version }}'
            dest: '/var/opt/tftpboot/{{ new_version }}'
         connection: ssh
         delegate_to: "{{ item.value.device.display }}"
@@ -110,7 +110,7 @@
 
       - name: enable tftp
         copy:
-            src: ~/artefacts/_tftpd
+            src: ~/artifacts/_tftpd
             dest: /etc/xinetd.d/tftpd
             owner: root
             group: root
