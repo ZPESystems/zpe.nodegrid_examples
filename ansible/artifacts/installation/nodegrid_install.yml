@@ -2,8 +2,8 @@
   gather_facts: false
   vars:
      ansible_remote_tmp: /tmp
-     ttp_package: /var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/python3-ttp_0.9.1-r0_core2-64.ipk
-     ansible_cfg: /var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/nodegrid_ansible.cfg.j2
+     ttp_package: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/python3-ttp_0.9.1-r0_core2-64.ipk
+     ansible_cfg: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible.cfg.j2
   vars_prompt:
       - name: ssh_key
         prompt: Entery a users ssh public key, this will enable that user to login to the ansible user with ssh
@@ -70,7 +70,7 @@
       block:
         - name: add to ansible user to sudoers
           copy:
-            src: '/var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/nodegrid_ansible_sudoers.j2'
+            src: '/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible_sudoers.j2'
             dest: '/etc/sudoers.d/ansible'
             owner: root
             group: root

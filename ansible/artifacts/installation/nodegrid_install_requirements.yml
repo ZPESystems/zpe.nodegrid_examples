@@ -46,7 +46,7 @@
 
         - name: add to ansible user to sudoers
           copy:
-            src: '/var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/nodegrid_ansible_sudoers.j2'
+            src: '/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible_sudoers.j2'
             dest: '/etc/sudoers.d/ansible'
             owner: root
             group: root
@@ -67,17 +67,17 @@
             recurse: 'yes'
 
         - name: install collections
-          shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/collections/requirements.yml -p /etc/ansible/collections'
+          shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/requirements.yml -p /etc/ansible/collections'
 
         - name: update ansible.cfg
           copy:
-            src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/nodegrid_ansible.cfg.j2
+            src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible.cfg.j2
             dest: /etc/ansible/ansible.cfg
             owner: ansible
             group: ansible
 
         - name: install dependencies
-          shell: 'python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/zpe.nodegrid_examples/artifacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
+          shell: 'python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
 
         - name: create symbolic link in file_manager
           ansible.builtin.file:
@@ -90,7 +90,7 @@
             src: "{{ item }}" 
             dest: /etc/ansible/playbooks/
           with_fileglob:
-            - /var/local/file_manager/admin_group/zpe.nodegrid_examples/playbooks/*
+            - /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/playbooks/*
 
         - name: ensure proper permissions for /etc/ansible
           file:
