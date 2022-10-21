@@ -1,7 +1,0 @@
-collections:
-  - name: /var/local/file_manager/admin_group/ansible/artefacts/collections/zpe-network-1.0.1.tar.gz
-    type: file
-  - name: /var/local/file_manager/admin_group/ansible/artefacts/collections/zpe-system-1.0.1.tar.gz
-    type: file
-  - name: /var/local/file_manager/admin_group/ansible/artefacts/collections/zpe-device_connection-1.0.1.tar.gz
-    type: file

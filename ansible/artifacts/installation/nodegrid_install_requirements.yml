@@ -1,0 +1,104 @@
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: setup ansible user
+      block:
+        - name: check if ansible user has an existing sshkey
+          stat:
+            path: "/home/ansible/.ssh/id_ed25519"
+          register: key
+
+        - name: create sshkey if none exist
+          shell: 'ssh-keygen -t ed25519 -f /home/ansible/.ssh/id_ed25519 -N "" -C ansible@local'
+          when: not key.stat.exists
+
+        - name: ensure proper permissions for private sshkey
+          file:
+            path: "/home/ansible/.ssh/id_ed25519"
+            owner: ansible
+            group: ansible
+            mode: 0600
+            backup: 'yes'
+
+        - name: ensure proper permissions for public sshkey
+          file:
+            path: "/home/ansible/.ssh/id_ed25519.pub"
+            owner: ansible
+            group: ansible
+            mode: 0644
+            backup: 'yes'
+
+        - name: copy public key to tmp
+          shell: 'cp --preserve=mode,ownership /home/ansible/.ssh/id_ed25519.pub /tmp/id_ed25519.pub'
+
+        - name: update authorized key file
+          authorized_key:
+            user: "ansible"
+            key: "{{ lookup('file', '/tmp/id_ed25519.pub') }}"
+
+        - name: remove public_key from tmp
+          file:
+            path: /tmp/id_ed25519.pub
+            state: absent
+          ignore_errors: true
+
+        - name: add to ansible user to sudoers
+          copy:
+            src: '/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible_sudoers.j2'
+            dest: '/etc/sudoers.d/ansible'
+            owner: root
+            group: root
+            mode: 0600
+      become: true 
+      become_user: root
+
+    - name: setup ansible environment
+      block:
+        - name: create collections folder
+          file:
+            path: "/etc/ansible/collections"
+            state: directory
+            owner: ansible
+            group: admin
+            mode: 0775
+            backup: 'yes'
+            recurse: 'yes'
+
+        - name: install collections
+          shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/requirements.yml -p /etc/ansible/collections'
+
+        - name: update ansible.cfg
+          copy:
+            src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_ansible.cfg.j2
+            dest: /etc/ansible/ansible.cfg
+            owner: ansible
+            group: ansible
+
+        - name: install dependencies
+          shell: 'python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
+
+        - name: create symbolic link in file_manager
+          ansible.builtin.file:
+            src: "/etc/ansible/"
+            dest: "/var/local/file_manager/admin_group/ansible"
+            state: link
+
+        - name: copy playbooks to /etc/ansible/playbooks
+          copy:
+            src: "{{ item }}" 
+            dest: /etc/ansible/playbooks/
+          with_fileglob:
+            - /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/playbooks/*
+
+        - name: ensure proper permissions for /etc/ansible
+          file:
+            path: "/etc/ansible"
+            owner: ansible
+            group: admin
+            mode: 0775
+            backup: 'yes'
+            recurse: 'yes'
+      become: true
+      become_user: root
