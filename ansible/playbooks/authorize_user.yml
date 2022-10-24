@@ -1,0 +1,13 @@
+- hosts: localhost
+  gather_facts: false
+  vars_prompt:
+      - name: ssh_key
+        prompt: Enter a user's ssh public key to access ansible user via ssh
+
+  connection: local
+  tasks:
+  - name: authorize user to access ansible user via ssh
+    authorized_key:
+      user: "ansible"
+      key: "{{ ssh_key }}"
+    become: true

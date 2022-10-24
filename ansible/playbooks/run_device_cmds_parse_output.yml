@@ -2,7 +2,7 @@
   gather_facts: false
   collections:
     - zpe.device_connection
-  var:
+  vars:
     template_location: ./template
 
   tasks:

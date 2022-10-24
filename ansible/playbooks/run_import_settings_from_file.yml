@@ -1,6 +1,6 @@
 - name: Import Settings from import_settings file
   hosts: all
-  var:
+  vars:
     import_settings_file: /etc/ansible/templates/settings.j2
 
   tasks:
