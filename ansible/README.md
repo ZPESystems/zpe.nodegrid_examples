@@ -20,7 +20,7 @@ The collection can be installed by the default 'admin' user, this will enable th
 - Upload the file `zpe.nodegrid_examples.zip` file into the folder
 - Close the File Manager window
 - Open a Console connection to Nodegrid
-- Acesse o shell como usuário administrador usando o comando `shell`
+- Access the shell as an admin user using the `shell` command
 - Navigate to `/var/local/file_manager/admin_group/` 
 ```shell script
 cd /var/local/file_manager/admin_group/
@@ -42,7 +42,7 @@ git clone https://github.com/ZPESystems/zpe.nodegrid_examples.git
 ```
 
 ### Install on Nodegrid 5.6.3 or latest to configure Ansible user and environment
-- install the requirements
+- install requirements in admin shell 
 ```shell script
 ansible-playbook /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_install_requirements.yml
 ```
