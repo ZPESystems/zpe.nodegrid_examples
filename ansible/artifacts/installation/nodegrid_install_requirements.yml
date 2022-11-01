@@ -20,7 +20,7 @@
             owner: ansible
             group: ansible
             mode: 0600
-            backup: 'yes'
+            backup: 'true'
 
         - name: ensure proper permissions for public sshkey
           file:
@@ -28,7 +28,7 @@
             owner: ansible
             group: ansible
             mode: 0644
-            backup: 'yes'
+            backup: 'true'
 
         - name: copy public key to tmp
           shell: 'cp --preserve=mode,ownership /home/ansible/.ssh/id_ed25519.pub /tmp/id_ed25519.pub'
@@ -56,18 +56,53 @@
 
     - name: setup ansible environment
       block:
-        - name: create collections folder
+        - name: create ansible folder on file_manager
           file:
-            path: "/etc/ansible/collections"
+            path: "/var/local/file_manager/admin_group/ansible"
             state: directory
-            owner: ansible
+            owner: root
             group: admin
-            mode: 0775
-            backup: 'yes'
-            recurse: 'yes'
+            recurse: 'true'
+
+        - name: check if system_inventories folder exist
+          stat:
+            path: "/etc/ansible/system_inventories/"
+          register: system_inventories
+        
+        - name: create system_inventories folder and move cluster.py
+          copy:
+            src: /etc/ansible/inventories/cluster.py
+            dest: /etc/ansible/system_inventories/
+            owner: ansible
+            group: ansible 
+            mode: 0755
+          when: not system_inventories.stat.exists
+
+        - name: remove cluster.py from inventories
+          file:
+            path: /etc/ansible/inventories/cluster.py
+            state: absent
+
+        - name: create collections and inventories folders
+          file:
+            path: "/etc/ansible/{{ item }}"
+            state: directory
+          with_list:
+            - "collections"
+            - "inventories"
 
         - name: install collections
           shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/requirements.yml -p /etc/ansible/collections'
+
+        - name: install dependencies
+          shell: 'sudo -H -u ansible python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
+          args:
+            warn: false
+
+        - name: create environment variable
+          shell: 'if [ -z $TTPCACHEFOLDER ]; then echo "export TTPCACHEFOLDER=\"/tmp\"" >> /home/ansible/.profile; source /home/ansible/.profile; fi'
+          args:
+            warn: false
 
         - name: update ansible.cfg
           copy:
@@ -76,14 +111,15 @@
             owner: ansible
             group: ansible
 
-        - name: install dependencies
-          shell: 'python3 -m pip install ttp --no-index --find-links=/var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/ttp-0.9.1-py2.py3-none-any.whl'
-
         - name: create symbolic link in file_manager
           ansible.builtin.file:
-            src: "/etc/ansible/"
-            dest: "/var/local/file_manager/admin_group/ansible"
+            src: "/etc/ansible/{{ item }}"
+            dest: "/var/local/file_manager/admin_group/ansible/{{ item }}"
             state: link
+          with_list:
+            - "inventories"
+            - "playbooks"
+            - "templates"
 
         - name: copy playbooks to /etc/ansible/playbooks
           copy:
@@ -92,13 +128,42 @@
           with_fileglob:
             - /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/playbooks/*
 
-        - name: ensure proper permissions for /etc/ansible
-          file:
-            path: "/etc/ansible"
+        - name: copy host.yml to /etc/ansible/inventories
+          copy:
+            src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/inventory/hosts.yml
+            dest: /etc/ansible/inventories/
             owner: ansible
             group: admin
             mode: 0775
-            backup: 'yes'
-            recurse: 'yes'
+
+        - name: copy devices.py to /etc/ansible/system_inventories
+          copy:
+            src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/inventory/devices.py
+            dest: /etc/ansible/system_inventories/
+            owner: ansible
+            group: ansible
+            mode: 0755
+        
+        - name: ensure proper permissions to /etc/ansible/
+          file:
+            path: "/etc/ansible/{{ item }}"
+            owner: ansible
+            group: admin
+            mode: 0775
+            backup: 'true'
+            recurse: 'true'
+          with_list:
+            - "inventories"
+            - "playbooks"
+            - "templates"
+            - "collections"
+
+        - name: ensure proper permissions to ansible.log
+          file:
+            path: "/var/log/ansible"
+            owner: ansible
+            group: ansible
+            mode: 0775
+            recurse: 'true'
       become: true
       become_user: root
