@@ -128,7 +128,7 @@
           with_fileglob:
             - /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/playbooks/*
 
-        - name: copy host.yml to /etc/ansible/inventories
+        - name: copy hosts.yml to /etc/ansible/inventories
           copy:
             src: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/inventory/hosts.yml
             dest: /etc/ansible/inventories/
@@ -158,6 +158,11 @@
             - "templates"
             - "collections"
 
+        - name: check if log ansible exist
+          stat:
+            path: "/var/log/ansible"
+          register: ansible_log
+
         - name: ensure proper permissions to ansible.log
           file:
             path: "/var/log/ansible"
@@ -165,5 +170,6 @@
             group: ansible
             mode: 0775
             recurse: 'true'
+          when: ansible_log.stat.exists
       become: true
       become_user: root

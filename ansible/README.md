@@ -14,7 +14,7 @@ The collection can be installed by the default 'admin' user, this will enable th
 #### Download the examples
 - Download the repository as a zip for a full collection or use the `git clone` command to clone the full repository
 
-#### Repository downloaded as zip (zpe.nodegrid examples.zip)
+#### Repository downloaded as zip (zpe.nodegrid_examples.zip)
 - Connect to the WebUI as a admin user
 - Open the file Manager and navigate to admin_group
 - Upload the file `zpe.nodegrid_examples.zip` file into the folder
@@ -50,7 +50,7 @@ ansible-playbook /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansib
 ```shell script
 sudo su - ansible
 ```
-#### Allow a user to connect to the ansible user via ssh
+#### [Optional] Allow a user to connect to the ansible user via ssh
 - It is possible to authorize a user to access the ansible user via ssh by running `authorize_user.yml` playbook. For this, it is necessary to paste the ssh public key of the user in the playbook execution.
 ```shell script
 ansible-playbook /var/local/file_manager/admin_group/ansible/playbooks/authorize_user.yml
