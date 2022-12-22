@@ -36,12 +36,12 @@ unzip zpe.nodegrid_examples.zip
 ```shell script
 cd /var/local/file_manager/admin_group/
 ```
-- Clone de repository
+- Clone the repository
 ```shell script
 git clone https://github.com/ZPESystems/zpe.nodegrid_examples.git
 ```
 
-### Install on Nodegrid 5.6.3 or latest to configure Ansible user and environment
+### Install on Nodegrid 5.6.3 or later to configure Ansible user and environment
 - install requirements in admin shell 
 ```shell script
 ansible-playbook /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/installation/nodegrid_install_requirements.yml

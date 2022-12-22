@@ -1,0 +1,5 @@
+field,value,scope,target
+show_hostname,yes,host,localhost
+idle_timeout,4800,host,localhost
+enable_banner,yes,host,localhost
+revision_tag,playbook_with_variables,host,localhost
