@@ -10,7 +10,9 @@
         dest: /tmp/import_settings.cli
 
     - name: import settings
-      command: cli -c "import_settings --file /tmp/import_settings.cli"
+      zpe.system.nodegrid_cmds:
+        cmds:
+          - cmd: 'import_settings --file /tmp/import_settings.cli'
       register: output
     - name: response
       debug:
