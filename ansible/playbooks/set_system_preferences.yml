@@ -9,3 +9,4 @@
         show_hostname_on_webui_header: "yes"
         idle_timeout: "3600"
         enable_banner: "yes"
+        revision_tag: 'Ansible_Playbook-set_system_preferences.yml'
