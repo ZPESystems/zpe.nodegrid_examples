@@ -83,13 +83,14 @@
             path: /etc/ansible/inventories/cluster.py
             state: absent
 
-        - name: create collections and inventories folders
+        - name: create collections, inventories and roles folders
           file:
             path: "/etc/ansible/{{ item }}"
             state: directory
           with_list:
             - "collections"
             - "inventories"
+            - "roles"
 
         - name: install collections
           shell: 'ansible-galaxy collection install -r /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/requirements.yml -p /etc/ansible/collections'
@@ -120,6 +121,7 @@
             - "inventories"
             - "playbooks"
             - "templates"
+            - "roles"
 
         - name: copy playbooks to /etc/ansible/playbooks
           copy:
@@ -157,6 +159,7 @@
             - "playbooks"
             - "templates"
             - "collections"
+            - "roles"
 
         - name: check if log ansible exist
           stat:
