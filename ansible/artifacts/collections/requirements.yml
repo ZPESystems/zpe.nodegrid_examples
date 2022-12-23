@@ -3,5 +3,5 @@ collections:
     type: file
   - name: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/zpe-system-1.0.2.tar.gz
     type: file
-  - name: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/zpe-device-1.0.2.tar.gz
+  - name: /var/local/file_manager/admin_group/zpe.nodegrid_examples/ansible/artifacts/collections/zpe-device_connection-1.0.2.tar.gz
     type: file
