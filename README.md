@@ -62,15 +62,15 @@ ansible-playbook /var/local/file_manager/admin_group/ansible/playbooks/authorize
 ```
 
 ## 1.2. Ready to run the first playbook
-### 1.2.1 Activate General Management
-"General Management" is a new feature that enables administrators to execute, schedule, and manage automation tasks for the local host or all appliances which are part of a Cluster.
+### 1.2.1 Activate Central Management
+"Central Management" is a new feature that enables administrators to execute, schedule, and manage automation tasks for the local host or all appliances which are part of a Cluster.
 Note: This feature is only available in version 5.8 or later
-- in the WebUI navigate to Cluster -> Settings
+- In the WebUI navigate to Cluster -> Settings
 - Activate the 'Enable Cluster' option. If the unit is already part of Cluster, then no further steps are required.
-- Provide as a preshared key the value 'nodegrid' and click on save
+- Provide as a preshared key the value 'nodegrid' (or any other preshared key value) and click on save
 
 #### 1.2.2 Run your first playbook
-- Navigate to Settings > General Management -> Inventory
+- Navigate to System > Central Management -> Inventory
 - Select 'localhost' and click on run
 - From the drop-down select the example playbook 'set_system_preferences.yml' and click on Run again
 - The playbook will update the following settings under System -> Preferences:
