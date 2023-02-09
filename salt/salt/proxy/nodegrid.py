@@ -10,7 +10,8 @@ from __future__ import absolute_import
 # Import python libs
 import logging
 from io import BytesIO
-from re import sub, search
+from re import search, subn
+from re import compile as re_compile
 from os.path import exists
 from os import remove, system
 from time import sleep
@@ -26,7 +27,7 @@ CLI_PROMPT = [
     '$ ',           # user
     '(yes, no)  :'  # reboot, delete...
 ]
-CLI_PROMPT_REGEX = r"\[.+@.+ ?.+\]#\n"
+CLI_PROMPT_REGEX = r"^\[.+@.+ ?.+\]# $"
 CLI_TIMEOUT = 60
 MINION_FILE_CACHE = "/tmp/"
 
@@ -282,16 +283,47 @@ def _format_ouput(sent, received, error):
         "errors": error
     }
 
+def _escapeAnsi(line):
+    ansi_escape = re_compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub(' ', line)
+
 
 def _get_cli_output():
     output = ""
     out = DETAILS["mread"].getvalue().decode('utf-8')
-    log.debug("mread="+str(out))
-    for line in out.splitlines():
-        if line != "":
-            output = output + line.strip() + "\n"
-    output = sub(CLI_PROMPT_REGEX, "", output).strip()
-    log.debug("_get_cli_output mread="+str(output))
+    log.debug("out='"+str(out)+"'")
+    # log.debug("out="+repr(out))
+    out = out.replace("\rPassword: \r\n", "")
+    out = out.replace(" .sessionpageout undefined=no\r\n", "")
+    out = out.replace("no\r\r\n", "")
+
+    for line in _escapeAnsi(out).splitlines():
+        # log.debug("repr line="+repr(line))
+        # log.debug("str  line='"+str(line)+"'")
+        if not line.strip():
+            continue
+        if line.endswith("#]"):
+            log.debug("1 removing line='"+repr(line)+"'")
+            continue
+        if line.endswith("#] "):
+            log.debug("2 removing line='"+repr(line)+"'")
+            continue
+        if repr(line).endswith("#] \x07"):
+            log.debug("3 removing line='"+repr(line)+"'")
+            continue
+        if line.isspace():
+            log.debug("4 removing line='"+repr(line)+"'")
+            continue
+        if not line.isprintable():
+            log.debug("5 removing line='"+repr(line)+"'")
+            continue
+        line, check = subn(CLI_PROMPT_REGEX, " ", line)
+        log.debug("_get_cli_output check="+str(check))
+        if check > 0:
+            continue
+        output = output + line.strip() + "\n"
+    log.debug("_get_cli_output output="+str(output))
+    # log.debug("_get_cli_output repr output="+repr(output))
     return output
 
 
@@ -598,6 +630,8 @@ def cli(command, **kwargs): # pylint: disable=unused-argument
         if not conn_obj:
             return ret
 
+        ret = _send_cli_command(conn_obj, '.sessionpageout undefined=no')
+
         ret = _send_cli_command(conn_obj, command)
 
         if ret == -1:
@@ -874,7 +908,7 @@ def save_settings(**kwargs):
             "\ncommit"
 
     log.debug("save_settings cmd="+str(cmd))
-    print("save_settings cmd="+str(cmd))
+    log.debug("save_settings cmd="+str(cmd))
     if cmd:
         ret = __proxy__["nodegrid.cli"](cmd)    # pylint: disable=undefined-variable
         if not "Error" in ret:
@@ -939,7 +973,7 @@ def apply_settings(**kwargs):
             "\napply\nyes"
 
     log.debug("apply_settings cmd="+str(cmd))
-    print("apply_settings cmd="+str(cmd))
+    log.debug("apply_settings cmd="+str(cmd))
     if cmd:
         ret = __proxy__["nodegrid.cli"](cmd)    # pylint: disable=undefined-variable
         if not "Error" in ret:
@@ -1015,21 +1049,21 @@ def change_default_password(**kwargs):
 
         conn_obj, ret = _connect()
         if not ret:
-            return "Could not login after password change."
+            return (False, "Could not login after password change")
 
     except (pexpect.exceptions.EOF, pexpect.exceptions.TIMEOUT, Exception) as perror:
         # treat already changed password
         conn_obj, ret = _connect()
         if "OK" in ret:
-            return "True, The password was already changed"
+            return (True, "The password was already changed")
         # treat exception
         _do_log_exception(perror, "_pexpect_connect")
         err = "Error: " + str(perror).splitlines()[0]
         if "Timeout" in err:
-            return "Timeout error, please check device credentials."
-        return err
+            return (False, "Timeout error, please check device credentials")
+        return (False, err)
 
-    return True
+    return (True, "The password has been changed succesfully")
 
 
 def software_upgrade(**kwargs):
@@ -1058,7 +1092,7 @@ def software_upgrade(**kwargs):
 
     log.debug("PROXY zpe_nodegrid software_upgrade")
     log.debug("kwargs: ["+ str(kwargs) +"]")
-    print("kwargs: ["+ str(kwargs) +"]")
+    log.debug("kwargs: ["+ str(kwargs) +"]")
 
     cmd = ""
     cmd_optional = ""
@@ -1112,13 +1146,13 @@ def software_upgrade(**kwargs):
             "\nset the_path_in_url_to_be_used_as_absolute_path_name="+kwargs["absolute_name"] + "\n"
 
     if cmd:
-        print("software_upgrade cmd_optional\n"+str(cmd_optional))
         log.debug("software_upgrade cmd_optional="+str(cmd_optional))
         cmd = cmd + cmd_optional
         cmd = cmd + cmd_commit
-        print("software_upgrade cmd=\n"+str(cmd))
         log.debug("software_upgrade cmd="+str(cmd))
         ret = __proxy__["nodegrid.cli"](cmd)    # pylint: disable=undefined-variable
+        if "The system is going down for reboot NOW" in ret:
+            fn_ret = True
         if not "Error" in ret:
             fn_ret = True
         else:
@@ -1142,7 +1176,13 @@ def software_upgrade(**kwargs):
         kwargs.__setitem__("wait_secs", wait_secs)
         # now wait software upgrade proccess using ping
         log.debug("software_upgrade ping opts="+str(kwargs))
-        __proxy__["nodegrid.ping_icmp"](**kwargs)
+        ret = __proxy__["nodegrid.ping_icmp"](**kwargs)
+        log.debug("software_upgrade ping_icmp ret="+str(ret))
+        if (kwargs.get("format_partitions_before_upgrade") == "yes"):
+            log.debug("software_upgrade reformat yes, try change default password")
+            ret = __proxy__["nodegrid.change_default_password"](**kwargs)
+            log.debug("software_upgrade reformat - change_default_password ret = " + str(ret))
+
         fn_ret = __proxy__["nodegrid.ping"](**kwargs)
 
     return fn_ret

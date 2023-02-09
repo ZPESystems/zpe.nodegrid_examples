@@ -63,7 +63,7 @@ salt '*' nodegrid.ping_icmp retries=10 wait_secs=5 --timeout 50
 
 ## salt.proxy.nodegrid.change_default_password()
 
-Returns True if default password was changed successfully.
+Returns a list containing boolean and a status message.
 Launch SSH and Change password to the pillar file password.
 Validates if changed to pillar password.
 

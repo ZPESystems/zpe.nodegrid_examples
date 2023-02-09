@@ -142,7 +142,7 @@ def change_default_password():
     print("\nINFO: Now changing default password...")
     output = SALT_API.cmd(TARGET, 'nodegrid.change_default_password')
     pprint_output(f"nodegrid.change_default_password", output)
-    if "False" in str(output):
+    if "False" in str(output) or "Timeout" in str(output):
         print("ERROR: Could not change target default password!")
         sys.exit(2)
 

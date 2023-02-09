@@ -1,14 +1,15 @@
 # Nodegrid Salt Proxy Module
 
 - [Nodegrid Salt Proxy Module](#nodegrid-salt-proxy-module)
+- [Pillar](#pillar)
 - [Nodegrid Proxy Module Available Functions](#nodegrid-proxy-module-available-functions)
 - [Nodegrid Proxy Module Installation](#nodegrid-proxy-module-installation)
   - [ZPE Salt Installation Guide](#zpe-salt-installation-guide)
   - [Dependencies](#dependencies)
     - [python-pexpect](#python-pexpect)
-  - [Module Installation for Existing Salt Installation](#module-installation-for-existing-salt-installation)
+  - [Module Install on a Salt Installation](#module-install-on-a-salt-installation)
   - [Nodegrid Proxy Module Configuration](#nodegrid-proxy-module-configuration)
-    - [On SALT-MASTER: Configure and Run](#on-salt-master-configure-and-run)
+    - [Step 1: On MASTER: Configure and Run master](#step-1-on-master-configure-and-run-master)
     - [On SALT-PROXY: Configure and Run](#on-salt-proxy-configure-and-run)
     - [On SALT-MASTER: Accept Minion key](#on-salt-master-accept-minion-key)
     - [On SALT-PROXY: Run](#on-salt-proxy-run)
@@ -17,6 +18,7 @@
   - [Output example](#output-example)
 - [ZPE Salt Examples](#zpe-salt-examples)
   - [Configure ZPE Out of Box - Factory Default](#configure-zpe-out-of-box---factory-default)
+    - [Routines](#routines)
     - [Requirements](#requirements)
     - [Execution](#execution)
     - [Verification](#verification)
@@ -39,7 +41,7 @@
 - [Salt installation on Ubuntu](#salt-installation-on-ubuntu)
 
 
-Proxy Minion interface module for managing ZPE's Nodegrid OS hosts.
+This repository Proxy Minion interface module for managing ZPE's Nodegrid OS hosts.
 
 This proxy minion enables Nodegrid OS hosts to be treated individually like a Salt Minion.
 
@@ -48,6 +50,19 @@ Salt's "Proxy Minion" functionality enables you to designate another machine to 
 More in-depth conceptual reading on [Proxy Minions](https://docs.saltproject.io/en/latest/topics/proxyminion/index.html#proxy-minion) can be found in the Proxy Minion section of Salt's documentation.
 
 > This module depends on a pre-installed Salt environment - [Salt Installation documentation](https://docs.saltproject.io/en/latest/topics/installation/index.html)
+
+# Pillar
+
+Proxy minions get their configuration from Salt's Pillar. Every proxy must have an instance in the Pillar file and a reference in the Pillar top file that matches the proxy ID.
+
+At a minimum for communication with the Nodegrid host, the pillar should look like this:
+```
+proxy:
+  proxytype: nodegrid
+  host: <ip or hostname of nodegrid host>
+  username: <nodegrid administrator username>
+  password: <password>
+```
 
 # Nodegrid Proxy Module Available Functions
 
@@ -77,48 +92,33 @@ python-pexpect can be installed via pip:
 `$ pip install python-pexpect`
 
 
-## Module Installation for Existing Salt Installation
+## Module Install on a Salt Installation
 
 On the SALT MASTER, connect to SSH and go to shell.
 
-Clone the example repository:
-```
-$ git clone https://github.com/ZPESystems/zpe.nodegrid_examples.git
-$ cd zpe.nodegrid_examples/salt
-```
-
-Install the proxy module on Salt default installation folder (file_roots):
+Create folder to modules installation, default is `/srv/salt/`:
 ```
 sudo mkdir -p /srv/salt/_proxy
 sudo mkdir -p /srv/salt/_modules
+```
+
+Clone the example repository and install:
+```
+git clone https://github.com/ZPESystems/zpe.nodegrid_examples.git
+cd zpe.nodegrid_examples/salt
 sudo cp salt/proxy/nodegrid.py /srv/salt/_proxy/
 sudo cp salt/modules/nodegrid.py /srv/salt/_modules/
 ```
 
-If you already have SALT instances running (salt-master/salt-minion) you can sync this new module using the commands below on SALT MASTER to then use on salt-proxy:
-```
-sudo salt '*' saltutil.sync_modules
-sudo salt '*' saltutil.sync_proxymodules
-```
-
-
 ## Nodegrid Proxy Module Configuration
 
-Proxy minions get their configuration from Salt's Pillar. Every proxy must have an instance in the Pillar file and a reference in the Pillar top file that matches the proxy ID.
+INTRO - use case
+DIAGRAM
 
-At a minimum for communication with the Nodegrid host, the pillar should look like this:
-```
-proxy:
-  proxytype: nodegrid
-  host: <ip or hostname of nodegrid host>
-  username: <nodegrid administrator username>
-  password: <password>
-```
-
-### On SALT-MASTER: Configure and Run
+### Step 1: On MASTER: Configure and Run master
 For each **file** add the following **contents**.
 
-Configure the '/etc/salt/master' path to the file repository and pillar:
+Edit the '/etc/salt/master' file to include the path to the file repository and pillar:
 ```
 file_roots:
   base:
@@ -133,7 +133,7 @@ Create a pillar directory for the pillar files configuration:
 sudo mkdir -p /srv/pillar
 ```
 
-In '/srv/pillar/top.sls' map the device details with the proxy name:
+In '/srv/pillar/top.sls' map the devices details with the proxy name:
 ```
 base:
   'nodegrid_host':
@@ -161,7 +161,7 @@ After storing the device information in the pillar on MASTER, now, configure the
 ### On SALT-PROXY: Configure and Run
 For each **file** add the following **contents**.
 
-Configure '/etc/salt/proxy' with MASTER address multiprocessing to False:
+Create or edit the file '/etc/salt/proxy' to configure MASTER address:
 ```
 master: <ip or hostname of salt-master>
 multiprocessing: False # IMPORTANT
@@ -255,7 +255,7 @@ nodegrid_host2:
 **Arguments**: for instance, a CLI command for the cli function
 ```
 # salt <target> <module>.<function> [<arguments>]
-sudo salt '*' nodegrid.cli "show /system/license"
+sudo salt '*' nodegrid.cli "show /settings/license"
 ```
 
 ## Output example
@@ -294,6 +294,15 @@ nodegrid_host2:
 ## Configure ZPE Out of Box - Factory Default
 
 > Only a single "salt target" is supported on the examples scripts below.
+
+### Routines
+
+- Change default password;
+- Check current version against desired version
+- Upgrade software in case not in desired version
+- Apply import_settings
+- Add license
+- Launch docker container via shell
 
 ### Requirements
 
