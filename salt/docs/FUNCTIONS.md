@@ -1,24 +1,5 @@
 # Nodegrid Proxy Module Available Functions
 
-- [Nodegrid Proxy Module Available Functions](#nodegrid-proxy-module-available-functions)
-  - [salt.proxy.nodegrid.ping()](#saltproxynodegridping)
-  - [salt.proxy.nodegrid.ping\_icmp()](#saltproxynodegridping_icmp)
-  - [salt.proxy.nodegrid.change\_default\_password()](#saltproxynodegridchange_default_password)
-  - [salt.proxy.nodegrid.check\_version(desired\_version)](#saltproxynodegridcheck_versiondesired_version)
-  - [salt.proxy.nodegrid.get\_system\_about()](#saltproxynodegridget_system_about)
-  - [salt.proxy.nodegrid.add\_license(lic\_key)](#saltproxynodegridadd_licenselic_key)
-  - [salt.proxy.nodegrid.cli(command)](#saltproxynodegridclicommand)
-  - [salt.proxy.nodegrid.cli\_file(file)](#saltproxynodegridcli_filefile)
-  - [salt.proxy.nodegrid.cli\_shell(command)](#saltproxynodegridcli_shellcommand)
-  - [salt.proxy.nodegrid.cli\_root\_shell(command)](#saltproxynodegridcli_root_shellcommand)
-  - [salt.proxy.nodegrid.import\_settings(command)](#saltproxynodegridimport_settingscommand)
-  - [salt.proxy.nodegrid.import\_settings\_file(file)](#saltproxynodegridimport_settings_filefile)
-  - [salt.proxy.nodegrid.export\_settings(path)](#saltproxynodegridexport_settingspath)
-  - [salt.proxy.nodegrid.save\_settings(\*\*kwargs)](#saltproxynodegridsave_settingskwargs)
-  - [salt.proxy.nodegrid.apply\_settings(\*\*kwargs)](#saltproxynodegridapply_settingskwargs)
-  - [salt.proxy.nodegrid.cp\_file(\*\*kwargs)](#saltproxynodegridcp_filekwargs)
-  - [salt.proxy.nodegrid.software\_upgrade(\*\*kwargs)](#saltproxynodegridsoftware_upgradekwargs)
-
 ## salt.proxy.nodegrid.ping()
 
 Test SSH connection to target.
