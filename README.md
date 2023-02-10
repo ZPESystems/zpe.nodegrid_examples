@@ -1,7 +1,7 @@
 # zpe.nodegrid_examples
 This repository contains automation examples and libraries which can be used with Nodegrid OS. The repository aims to help customers to get started on the automation journey with Nodegrid OS. We invite customers to provide feedback and suggestions on examples that can be added in the future.
 
-It is recommended to use the latest Nodegrid OS version (5.8.1 or higher) with the examples.
+It is recommended to use the latest Nodegrid OS version (5.8.2 or higher) with the examples.
 
 # 1. Getting Started - Using the build-in ansible features
 ## 1.1. Installation of examples
