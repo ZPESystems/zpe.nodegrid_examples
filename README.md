@@ -13,6 +13,6 @@ The examples currently include multiple technologies with their own repositories
 ## Salt
 - **Salt Proxy Minion:** The Salt Proxy Minion Library can be used to configure Nodegrid appliances. It implements features that allow for ZTP deployments using this library. The library and examples can be found [here](https://github.com/ZPESystems/Salt)
 
-##Cloudflare
+## Cloudflare
 - **Cloudflare Docker agent:** The repo explains how a Cloudflare agent can be deployed on a Nodegrid appliance. The implementation explores multiple use cases, including providing Zero Trust Access to individual end devices that can not directly support Cloudflares ZTNA agents. The repo and examples can be found [here](https://github.com/ZPESystems/cloudflare)
 
