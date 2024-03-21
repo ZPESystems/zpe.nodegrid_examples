@@ -8,7 +8,6 @@ The examples currently include multiple technologies with their own repositories
 
 ## Ansible
 - **Ansible Nodegrid Library:** The Ansible Nodegrid Library provides an Ansible library that helps to configure and manage Nodegrid appliances. The library enables customers to perform Zero Touch Provisioning, Firmware updates, Backup, Restores, and full Nodegrid configuration examples. The library and examples can be found [here](https://github.com/ZPESystems/Ansible)
-- **Ansible Device Library:** The Device Library enables customers to interact with connected devices, typically through a console connection. The library and examples can be found [here](https://github.com/ZPESystems/zpe.device_connection)
 
 ## Salt
 - **Salt Proxy Minion:** The Salt Proxy Minion Library can be used to configure Nodegrid appliances. It implements features that allow for ZTP deployments using this library. The library and examples can be found [here](https://github.com/ZPESystems/Salt)
